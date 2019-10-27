@@ -2,18 +2,35 @@ import React from 'react';
 import "./table.styles.scss"
 
 const TableComponent = ({users, name, email, phoneNumber})=>(
-    <div className='myDiv'>
-       
-        <ul className="myList-Group">
+    <div className="container-fluid">
+    <div className="d-flex justify-content-center">
+            <table className="table table-sm table-hover table-dark table-condensed w-auto">
+        <thead className="">
+            <tr>
+                <th>#</th>
+                <th>Name</th>
+                <th>Email</th>
+                <th>Phone</th>
+            </tr>
+        </thead>
+        <tbody>
             {users.map(printOut)}
-        </ul>
+        </tbody>  
+        </table>
+        
+    </div>
         <h2>{name} : {email} : {phoneNumber}</h2>
-    </div> 
+    </div>
 )
 
-function printOut(user){
+function printOut(user, i){
     return (
-        <li className="myList-Item">{user.name} : {user.email} : {user.phoneNumber}</li>
+        <tr>
+            <td>{i}</td>
+            <td>{user.name}</td>
+            <td>{user.email}</td>
+            <td>{user.phoneNumber}</td>
+        </tr>
     )
 }
 
