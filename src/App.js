@@ -12,8 +12,9 @@ class App extends Component {
 
     this.state = {
       users : [],
+      name: '',
       email: '',
-      password: ''
+      phoneNumber: ''
       
 
     };
@@ -27,9 +28,11 @@ class App extends Component {
       returnUsers.forEach(user => {
         console.log("user.name: "+ user.data().name);
         console.log("user.email: "+user.data().email);
+        console.log("user.phoneNumber: "+user.data().phoneNumber);
         users.push({
           name: user.data().name,
-          email: user.data().email
+          email: user.data().email,
+          phoneNumber: user.data().phoneNumber
         })
       })
       console.log("User Array: " + JSON.stringify(users) )
@@ -42,8 +45,12 @@ class App extends Component {
 
   handleSubmit = event => {
     event.preventDefault();
-
-    this.setState({ email: '', password: '' });
+    saveData({
+      name: this.state.name, 
+      email: this.state.email, 
+      phoneNumber: this.state.phoneNumber
+    });
+    this.setState({ name: '', email: '', phoneNumber: '' });
   };
 
   handleChange = event => {
@@ -61,29 +68,39 @@ class App extends Component {
         <h1>Homepage</h1>
         <TableComponent 
           users={this.state.users} 
+          name={this.state.name}
           email={this.state.email}
-          password={this.state.password}
+          phoneNumber={this.state.phoneNumber}
+
         />
 
         <form onSubmit={this.handleSubmit}>
           <FormInput
+            name='name'
+            type='text'
+            handleChange={this.handleChange}
+            value={this.state.name}
+            label='name'
+            required
+          />
+          <FormInput
             name='email'
             type='email'
-            handleChange={this.handleChange}
             value={this.state.email}
+            handleChange={this.handleChange}
             label='email'
             required
           />
           <FormInput
-            name='password'
-            type='password'
-            value={this.state.password}
+            name='phoneNumber'
+            type='text'
+            value={this.state.phoneNumber}
             handleChange={this.handleChange}
-            label='password'
+            label='Phone Number'
             required
           />
           <div className='buttons'>
-            <CustomButton type='submit'> Sign in </CustomButton>
+            <CustomButton type='submit'> Add to FireStore </CustomButton>
             
           </div>
         </form>
@@ -107,7 +124,15 @@ async function testDB(){
   })
   return usersRefGet.docs;
   
+}
 
+async function saveData(userData){
+  const db = firebase.firestore();
+  db.collection("users").add(userData).then((savedData)=>{
+    console.log("Data Saved!")
+  }).catch((err)=>{
+    console.log("Error in saving!")
+  })
 }
 
 

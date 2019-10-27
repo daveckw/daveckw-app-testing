@@ -1,22 +1,17 @@
 import React from 'react';
 
-const TableComponent = ({users, email, password})=>(
-
-
-    
+const TableComponent = ({users, name, email, phoneNumber})=>(
     <div>
-        <h2>{email} : {password}</h2>
-        <h2>{JSON.stringify(users)}</h2>
+        <h2>{name} : {email} : {phoneNumber}</h2>
         <ul>
             {users.map(printOut)}
         </ul>
-    </div>
-    
+    </div> 
 )
 
 function printOut(user){
     return (
-        <li>{user.name} : {user.email}</li>
+        <li>{user.name} : {user.email} : {user.phoneNumber}</li>
     )
 }
 
