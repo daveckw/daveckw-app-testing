@@ -9,13 +9,13 @@ import CustomButton from './components/custom-button/custom-button.component';
 class App extends Component {
   constructor() {
     super();
-
+    
     this.state = {
       users : [],
       name: '',
       email: '',
-      phoneNumber: ''
-      
+      phoneNumber: '',
+      id: ''
 
     };
 
@@ -26,10 +26,14 @@ class App extends Component {
       let users = [];
       console.log('returnUsers:' + returnUsers);
       returnUsers.forEach(user => {
-        console.log("user.name: "+ user.data().name);
+        console.log("user.id: "+ user.id); //to get id not need data()
         console.log("user.email: "+user.data().email);
         console.log("user.phoneNumber: "+user.data().phoneNumber);
+        const id = user.id;
+        const {...others} = user.data() //destructuring ...rest operator
+        console.log("id: "+id+" ...others: " + JSON.stringify(others));
         users.push({
+          id: id,
           name: user.data().name,
           email: user.data().email,
           phoneNumber: user.data().phoneNumber
@@ -51,11 +55,13 @@ class App extends Component {
       email: this.state.email, 
       phoneNumber: this.state.phoneNumber
     }
-    saveData(newUser).then(()=>{
-      const newStateUsers = [...this.state.users];  
+    saveData(newUser).then((savedId)=>{
+      const newStateUsers = [...this.state.users];
+      newUser.id = savedId;  
       newStateUsers.push(newUser)      
       console.log("newUser: "+JSON.stringify(newStateUsers));
-      console.log("typeof newUser: "+ typeof newStateUsers)
+      console.log("typeof newUser: "+ typeof newStateUsers);
+      console.log("savedID: "+savedId);
       this.setState({users: newStateUsers, name: '', email: '', phoneNumber: '' }); 
     })
   };
@@ -66,6 +72,17 @@ class App extends Component {
       console.log("this.state: "+JSON.stringify(this.state));
     });
   };
+
+  handleDelete = deletedUserId => {
+    let usersState = [...this.state.users];
+    usersState = usersState.filter((user) => {
+      console.log('user.id :' + user.id);
+      console.log('deletedUserId: ' + deletedUserId);
+      return user.id !== deletedUserId
+    });
+    this.setState({users: usersState});
+
+  }
 
   render() {
    
@@ -78,6 +95,7 @@ class App extends Component {
           name={this.state.name}
           email={this.state.email}
           phoneNumber={this.state.phoneNumber}
+          onDelete={this.handleDelete}
 
         />
 
@@ -135,12 +153,16 @@ async function testDB(){
 
 async function saveData(userData){
   const db = firebase.firestore();
-  db.collection("users").add(userData).then((savedData)=>{
+  
+  return await db.collection("users").add(userData).then((savedData)=>{
     console.log("Data Saved!")
-    
+    console.log("ID of savedData: "+savedData.id);
+    return savedData.id;
   }).catch((err)=>{
     console.log("Error in saving!")
   })
+  
+  
 }
 
 

@@ -1,37 +1,65 @@
 import React from 'react';
 import "./table.styles.scss"
+import firebase from '../../firebase/firebaseUtils'
 
-const TableComponent = ({users, name, email, phoneNumber})=>(
+class TableComponent extends React.Component{
+    constructor(props){
+        super(props);
+        this.handleClick = this.handleClick.bind(this);
+        this.state = {};
+    }
+
+    handleClick(e) {
+        const uid = e.target.getAttribute("data-index");
+        const db = firebase.firestore();
+        db.collection("users").doc(uid).delete().then(() => {
+            console.log("User deleted");
+            
+        }).catch(err => {
+            console.log("Error deleting data");
+        })
+        this.props.onDelete(uid);
+    }
+
+    render(){
+
+    return(
     <div className="container-fluid">
     <div className="d-flex justify-content-center">
             <table className="table table-sm table-hover table-dark table-condensed w-auto">
         <thead className="">
             <tr>
                 <th>#</th>
+                <th>id</th>
                 <th>Name</th>
                 <th>Email</th>
                 <th>Phone</th>
+                <th></th>
             </tr>
         </thead>
         <tbody>
-            {users.map(printOut)}
+            {this.props.users.map((user, i)=>{
+                return (
+                <tr>
+                    <td>{i}</td>
+                    <td>{user.id}</td>
+                    <td>{user.name}</td>
+                    <td>{user.email}</td>
+                    <td>{user.phoneNumber}</td>
+                    <td className="pointer" key={user.id} data-index={user.id} onClick={this.handleClick}>Delete</td>
+                </tr>
+                )
+            })}
         </tbody>  
         </table>
         
     </div>
-        <h2>{name} : {email} : {phoneNumber}</h2>
+        <h2>{this.props.name} : {this.props.email} : {this.props.phoneNumber}</h2>
     </div>
-)
-
-function printOut(user, i){
-    return (
-        <tr>
-            <td>{i}</td>
-            <td>{user.name}</td>
-            <td>{user.email}</td>
-            <td>{user.phoneNumber}</td>
-        </tr>
     )
+ }
 }
+
+
 
 export default TableComponent;

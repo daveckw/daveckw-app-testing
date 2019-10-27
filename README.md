@@ -1,2 +1,2 @@
-Branch 3
-Re-render after setstate after saving data
+Branch 4
+Added Delete Function
