@@ -37,20 +37,27 @@ class App extends Component {
       })
       console.log("User Array: " + JSON.stringify(users) )
       console.log("this.state.users: " + JSON.stringify(this.state.users));
+      console.log("typeof users: "+ typeof users)
       this.setState({users: users});
       console.log("this.state: "+JSON.stringify(this.state.users));
       
     });
   }
 
-  handleSubmit = event => {
+  handleSubmit = async event => {
     event.preventDefault();
-    saveData({
+    const newUser = {
       name: this.state.name, 
       email: this.state.email, 
       phoneNumber: this.state.phoneNumber
-    });
-    this.setState({ name: '', email: '', phoneNumber: '' });
+    }
+    saveData(newUser).then(()=>{
+      const newStateUsers = [...this.state.users];  
+      newStateUsers.push(newUser)      
+      console.log("newUser: "+JSON.stringify(newStateUsers));
+      console.log("typeof newUser: "+ typeof newStateUsers)
+      this.setState({users: newStateUsers, name: '', email: '', phoneNumber: '' }); 
+    })
   };
 
   handleChange = event => {
@@ -130,6 +137,7 @@ async function saveData(userData){
   const db = firebase.firestore();
   db.collection("users").add(userData).then((savedData)=>{
     console.log("Data Saved!")
+    
   }).catch((err)=>{
     console.log("Error in saving!")
   })
