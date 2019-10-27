@@ -1,2 +1,2 @@
-Branch 2
-Learn how to Save Data to Firestore
+Branch 3
+Re-render after setstate after saving data
