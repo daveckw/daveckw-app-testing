@@ -24,13 +24,12 @@ class TableComponent extends React.Component{
     render(){
 
     return(
-    <div className="container-fluid">
-    <div className="d-flex justify-content-center">
-            <table className="table table-sm table-hover table-dark table-condensed w-auto">
+    <div className="container-fluid ">
+    <div className="d-flex justify-content-center table-responsive">
+                <table className="table table-sm table-hover table-dark table-condensed">
         <thead className="">
             <tr>
                 <th>#</th>
-                <th>id</th>
                 <th>Name</th>
                 <th>Email</th>
                 <th>Phone</th>
@@ -42,7 +41,6 @@ class TableComponent extends React.Component{
                 return (
                 <tr>
                     <td>{i}</td>
-                    <td>{user.id}</td>
                     <td>{user.name}</td>
                     <td>{user.email}</td>
                     <td>{user.phoneNumber}</td>

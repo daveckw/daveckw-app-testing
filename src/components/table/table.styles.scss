@@ -4,7 +4,10 @@ body {
 }
 
 .table-condensed {
-    font-size: 2.5vh;
+    font-size: auto;
+     width:100%;
+     overflow: scroll;
+     padding: 0 0;
 }
 
 .pointer {
